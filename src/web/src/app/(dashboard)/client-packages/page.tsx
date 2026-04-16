@@ -31,6 +31,7 @@ export default function ClientPackagesPage() {
 
   const [creditDialogOpen, setCreditDialogOpen] = useState(false);
   const [creditClientPackageId, setCreditClientPackageId] = useState<number | null>(null);
+  const [creditClientName, setCreditClientName] = useState("");
   const [creditAmount, setCreditAmount] = useState("1");
   const [creditReason, setCreditReason] = useState("");
   const [creditHistory, setCreditHistory] = useState<CreditAdjustment[]>([]);
@@ -73,8 +74,9 @@ export default function ClientPackagesPage() {
     }
   };
 
-  const openCreditDialog = async (clientPackageId: number) => {
+  const openCreditDialog = async (clientPackageId: number, clientName: string) => {
     setCreditClientPackageId(clientPackageId);
+    setCreditClientName(clientName);
     setCreditAmount("1");
     setCreditReason("");
     setCreditDialogOpen(true);
@@ -141,7 +143,7 @@ export default function ClientPackagesPage() {
               <TableCell>{cp.expiryDate ? formatDate(cp.expiryDate) : "-"}</TableCell>
               <TableCell><Badge variant={statusVariant(cp.status)}>{statusLabel[cp.status] || cp.status}</Badge></TableCell>
               <TableCell className="text-right">
-                <Button variant="outline" size="sm" onClick={() => openCreditDialog(cp.id)}>
+                <Button variant="outline" size="sm" onClick={() => openCreditDialog(cp.id, cp.clientFullName)}>
                   <PlusCircle className="mr-1 h-4 w-4" />Ders Hakki
                 </Button>
               </TableCell>
@@ -185,7 +187,7 @@ export default function ClientPackagesPage() {
       <Dialog open={creditDialogOpen} onOpenChange={setCreditDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Ders Hakki Duzenleme</DialogTitle>
+            <DialogTitle>{creditClientName} - Ders Hakki Duzenleme</DialogTitle>
             <DialogDescription>
               Insiyatif olarak ders hakki ekleyin veya dusun. Neden girilmesi zorunludur.
             </DialogDescription>
