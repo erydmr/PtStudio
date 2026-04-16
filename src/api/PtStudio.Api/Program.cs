@@ -20,8 +20,20 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // DbContext
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+var connectionString = databaseUrl != null
+    ? ConvertDatabaseUrl(databaseUrl)
+    : builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
+
+static string ConvertDatabaseUrl(string url)
+{
+    var uri = new Uri(url);
+    var userInfo = uri.UserInfo.Split(':');
+    return $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+}
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
