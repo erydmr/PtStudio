@@ -1,0 +1,36 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+appsettings.Development.json
+appsettings.Production.json
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+.env
+.env.local
+.env.production
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Seed
+seed-data.sh

@@ -1,0 +1,6 @@
+@PtStudio.Api_HostAddress = http://localhost:5252
+
+GET {{PtStudio.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
