@@ -1,0 +1,14 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+COPY src/api/PtStudio.Api/PtStudio.Api.csproj src/api/PtStudio.Api/
+RUN dotnet restore src/api/PtStudio.Api/PtStudio.Api.csproj
+COPY src/api/ src/api/
+WORKDIR /src/src/api/PtStudio.Api
+RUN dotnet publish -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+WORKDIR /app
+COPY --from=build /app/publish .
+EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:8080
+ENTRYPOINT ["dotnet", "PtStudio.Api.dll"]
